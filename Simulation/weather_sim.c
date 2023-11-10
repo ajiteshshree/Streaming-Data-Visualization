@@ -5,8 +5,8 @@
 #include <netcdf.h>
 #include <mpi.h>
 
-#define NX 64
-#define NY 64
+#define NX 128
+#define NY 128
 #define DT 60.0 // Time step in seconds
 #define DX 1000.0 // Spatial step in meters
 #define U0 10.0 // Initial horizontal wind velocity (m/s)

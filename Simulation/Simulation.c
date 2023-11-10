@@ -92,28 +92,8 @@ void initializeField(double field[][NX][NY], int numSteps) {
 void simulateWeather(double field[][NX][NY], int rank, int num_processes, int numSteps) {
     double tempField[numSteps][NX][NY];
 
-    for (int t = 0; t < numSteps; t++) {
-        // Advection
-        for (int i = 0; i < NX; i++) {
-            for (int j = 0; j < NY; j++) {
-                int i_prev = ((int)(i - U0 * DT / DX + NX)) % NX;
-                int j_prev = ((int)(j - V0 * DT / DX + NY)) % NY;
-                tempField[t][i][j] = field[t][i_prev][j_prev];
-            }
-        }
-
-        // Diffusion
-        for (int i = 0; i < NX; i++) {
-            for (int j = 0; j < NY; j++) {
-                double laplacian = (field[t][(i + 1) % NX][j] + field[t][(i - 1 + NX) % NX][j]
-                                    + field[t][i][(j + 1) % NY] + field[t][i][(j - 1 + NY) % NY]
-                                    - 4 * field[t][i][j]) / (DX * DX);
-                tempField[t][i][j] += (KX * laplacian + KY * laplacian) * DT;
-            }
-        }
-        if (rank == 0) {
-            // Create a socket
-            int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+    if (rank == 0) {
+         int server_socket = socket(AF_INET, SOCK_STREAM, 0);
             if (server_socket == -1) {
                 perror("Socket creation failed");
                 exit(EXIT_FAILURE);
@@ -146,6 +126,60 @@ void simulateWeather(double field[][NX][NY], int rank, int num_processes, int nu
                 exit(EXIT_FAILURE);
             }
             printf("Connected\n");
+    for (int t = 0; t < numSteps; t++) {
+        // Advection
+        for (int i = 0; i < NX; i++) {
+            for (int j = 0; j < NY; j++) {
+                int i_prev = ((int)(i - U0 * DT / DX + NX)) % NX;
+                int j_prev = ((int)(j - V0 * DT / DX + NY)) % NY;
+                tempField[t][i][j] = field[t][i_prev][j_prev];
+            }
+        }
+
+        // Diffusion
+        for (int i = 0; i < NX; i++) {
+            for (int j = 0; j < NY; j++) {
+                double laplacian = (field[t][(i + 1) % NX][j] + field[t][(i - 1 + NX) % NX][j]
+                                    + field[t][i][(j + 1) % NY] + field[t][i][(j - 1 + NY) % NY]
+                                    - 4 * field[t][i][j]) / (DX * DX);
+                tempField[t][i][j] += (KX * laplacian + KY * laplacian) * DT;
+            }
+        }
+        // if (rank == 0) {
+            // Create a socket
+            // int server_socket = socket(AF_INET, SOCK_STREAM, 0);
+            // if (server_socket == -1) {
+            //     perror("Socket creation failed");
+            //     exit(EXIT_FAILURE);
+            // }
+            // printf("Socket Created\n");
+
+            // // Bind the socket to an address and port
+            // struct sockaddr_in server_address;
+            // server_address.sin_family = AF_INET;
+            // server_address.sin_port = htons(5566); // Replace with the desired port
+            // server_address.sin_addr.s_addr = inet_addr("127.0.0.1");
+
+            // if (bind(server_socket, (struct sockaddr*)&server_address, sizeof(server_address)) == -1) {
+            //     perror("Bind failed");
+            //     exit(EXIT_FAILURE);
+            // }
+            // printf("binded\n");
+
+            // // Listen for incoming connections
+            // if (listen(server_socket, 5) == -1) {
+            //     perror("Listen failed");
+            //     exit(EXIT_FAILURE);
+            // }
+            // printf("Listening\n");
+
+            // // Accept a client connection
+            // int client_socket = accept(server_socket, NULL, NULL);
+            // if (client_socket == -1) {
+            //     perror("Accept failed");
+            //     exit(EXIT_FAILURE);
+            // }
+            // printf("Connected\n");
 
             // Send a string to the client
             // char message[] = "Hello from C server!";
@@ -158,11 +192,16 @@ void simulateWeather(double field[][NX][NY], int rank, int num_processes, int nu
                     send(client_socket, &data, sizeof(data), 0);
                 }
             }
+            // bzero(buffer,1024);
+	        // recv(sock,buffer,sizeof(buffer),0);
+	        
 
             // Close the sockets
-            close(client_socket);
-            close(server_socket);
+            // close(client_socket);
+            // close(server_socket);
         }
+        close(client_socket);
+        close(server_socket);
     }
 
     // Write the field to NetCDF
