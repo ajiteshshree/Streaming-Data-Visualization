@@ -104,7 +104,7 @@ void simulateWeather(double field[][NX][NY], int rank, int num_processes, int nu
             struct sockaddr_in server_address;
             server_address.sin_family = AF_INET;
             server_address.sin_port = htons(5566); // Replace with the desired port
-            server_address.sin_addr.s_addr = inet_addr("127.0.0.1");
+            server_address.sin_addr.s_addr = inet_addr("172.23.151.115");
 
             if (bind(server_socket, (struct sockaddr*)&server_address, sizeof(server_address)) == -1) {
                 perror("Bind failed");
@@ -189,6 +189,8 @@ void simulateWeather(double field[][NX][NY], int rank, int num_processes, int nu
                 for (int j = 0; j < NY; j++) {
                     // Send a chunk of data to the client
                     double data=tempField[t][i][j];
+                    int len=sizeof(data);
+                    send(client_socket, &len, sizeof(len), 0);
                     send(client_socket, &data, sizeof(data), 0);
                 }
             }
