@@ -1,38 +1,56 @@
-# Weather_simulation
-The weather phenomenon simulated in this code is a simplified model of atmospheric advection and diffusion. The code is a simple 2D weather simulation that models the movement of air parcels (advection) and the smoothing of weather properties (diffusion) over a grid. This model doesn't represent the full complexity of atmospheric processes but serves as a basic illustration of how numerical simulations can be used to study weather phenomena.
+# Streaming Data Visualization 
 
-This code writes the output the field data to a NetCDF file named ```output.nc```. NetCDF is a file format often used for storing scientific data with metadata. It defines dimensions (time, x, y) and a variable ("field") to store the simulation data. The data is written to the NetCDF file in a loop over time steps.
+Scientists and researchers across diverse fields rely on visualization techniques to analyze simulation data. How-
+ever, this endeavor often proves cumbersome due to the resource-intensive nature of simulations, demanding high
+computational power typically found in supercomputer. Unfortunately, access to supercomputers and other re-
+sources is not consistently available. To address this challenge, there emerged a pressing need for a solution that
+allows simulations to run on computers with high computational power while enabling scientists and researchers to
+visualize the results conveniently on any computer, irrespective of its computational capabilities. This project aims
+to bridge this gap by developing an efficient streaming data visualization system that accommodates large-scale
+simulations, providing a flexible and accessible platform for data analysis and interpretation
 
-NetCDF, which stands for Network Common Data Form, is a data format that provides a way to store and exchange scientific data in a self-describing and platform-independent manner. NetCDF was developed to facilitate the storage, access, and sharing of large datasets, particularly in the fields of Earth sciences, atmospheric sciences, oceanography, and climate modeling. To use it, you can simply type ncview output.nc (http://meteora.ucsd.edu/~pierce/ncview_home_page.html). A comprehensive list of functions and commands may be found in the NetCDF webpage.
+## Our Approach
+We have a weather simulation for multiple time steps running on a server (Simulation server) which generates data which can be visualized for further analysis after saving it as a file.
 
-NOTE: Make sure to have gcc installed. If not, use:
-```
-sudo apt-get update
-sudo apt-get install gcc
-```
-To compile the code you need ```netcdf``` and ```mpich```. 
-To install netcdf:
-```
-sudo apt-get install libnetcdf-dev
-```
-To install mpich:
-```sudo apt-get install mpich```
-
-
-If netcdf is not installed as shown above, make the following changes in the ```Makefile```:
-```
-INCLUDE=/full/path/to/netcdf/include/
-LIB=/full/path/to/netcdf/lib/
-```
-
-To compile the code run:
-```make```
+Instead of writing the simulation data on a file, we streamed the data from a simulation server to a server for visualization (Visualization server) using TCP/IP protocol.
+The visualization cluster receives the data and visualizes it using VTK.
+ 
+This is done for multiple time steps specified by the user.
 
 
-To run the code
+## Running the Code
 
-```mpirun -np 4 ./weather_simulation n (Where n is the number of time steps)```
+To run the code we first need to download and install the following dependencies:
 
-To increase the output file size you can increase the number of time steps ```n```.
+Simulation Server:
 
-To change the size of the grid you can change the size of ```NX and NY``` in the code.
+1. MPICH: Link-https://www.mpich.org/downloads/
+2. mpi4py: pip install mpi4py
+3. NumPy: pip install numpy
+4. Time: pip install time
+5. Socket: pip install socket
+
+Visualization Server:
+
+1. VTK: pip install vtk
+2. NumPy: pip install numpy
+3. Socket: pip install socket
+4. Time: pip install time
+
+### Running Simulation:
+
+Open the folder Single Socket Approach for using single socket connection for the streaming or open the folder Multiple Socket Approach for using multiple socket connections (one for each time step) for the streaming.
+
+1. We first run the file SimulationServer.py using the following commands: 'python SimulationServer.py' on the simulation server.
+
+2. Now we need to specify the grid width and height.
+
+3. Now we need to specify the simulation servers IP address and port number
+4. Now specify the number of time steps.
+
+5. Now the simulation server will enter listen mode.
+
+6. We now run file VisualizationServer.py using the following commands: 'VisualizationServer.py' on the Visualization server.
+7. Now we need to specify the simulation servers IP address and port number.
+9. Now a window will open on visualization server and the visualization run on this window.
+10. When the visualisation ends, we can view the images for each time step in the same folder as VisualizationServer.py
