@@ -68,3 +68,7 @@ Explore the "Single Socket Approach" folder for utilizing a singular socket conn
 6. Window will open on the Visualization Server, where the visualization will take place for the specified time-steps.
 
 7. Upon completion of the visualization, the images corresponding to each time-step can be accessed within the subfolder named `visualization_pics`, located in the same directory as VisualizationServer.py.
+
+## Demonstration Video
+
+This <a href = 'https://drive.google.com/drive/folders/1jIpG7jBaMZ91HooAft1LkuWz6n_YAwHV?usp=sharing'>Demo folder</a>  includes videos showcasing the Simulation and Visualization servers in action, covering both the Multiple Socket and Single Socket approaches. 
