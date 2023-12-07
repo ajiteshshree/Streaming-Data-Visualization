@@ -71,4 +71,4 @@ Explore the "Single Socket Approach" folder for utilizing a singular socket conn
 
 ## Demonstration Video
 
-This <a href = 'https://drive.google.com/drive/folders/1jIpG7jBaMZ91HooAft1LkuWz6n_YAwHV?usp=sharing'>Demo folder</a>  includes videos showcasing the Simulation and Visualization servers in action, covering both the Multiple Socket and Single Socket approaches. 
+This <a href = 'https://drive.google.com/drive/folders/1jIpG7jBaMZ91HooAft1LkuWz6n_YAwHV?usp=sharing'>Demo folder</a>  includes videos showcasing the Simulation and Visualization servers in action, covering both the Multiple Socket and Single Socket approaches. First, watch the Simulation  demonstration, then the Visualization demonstration for both approaches.
