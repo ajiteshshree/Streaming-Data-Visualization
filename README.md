@@ -28,6 +28,8 @@ In lieu of saving the simulation data to a file, we have implemented a system to
 
 - This iterative process continues until the user-specified time-step limit is reached.
 
+  ![Visual Representation of both Approaches](https://github.com/ajiteshshree/Streaming-Data-Visualization/blob/main/Extras/img1.png)
+
 ## Running the Code
 
 ### Installing Dependencies:
